@@ -21,10 +21,6 @@
                         <field name="product_code" position="after">
 				<field name="part_url"/>
 			</field>
-                        <field name="product_tmpl_id" position="after">
-                                <field name="uom"/>
-                                <field name="uom_cost"/>
-			</field>
 		</field>
 	</record>
 </odoo>

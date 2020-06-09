@@ -1,8 +1,8 @@
 {
         'name': 'Aeronavics Inventory',
-        'version': '12.0.1.0.0',
+        'version': '10.0.1.0.0',
         'category': 'Warehouse',
-        'summary': "Aeronavics Inventory For Odoo 12",
+        'summary': "Aeronavics Inventory For Odoo 10",
         'sequence': '10',
         'author': 'James Morritt',
         'maintainer': 'Aeronavics',
