@@ -91,12 +91,15 @@ int main(int argc, const char** argv)
 
     if (mode == "get")
     {
+	// Open the file to print to
 	ofstream filestream(filepath);
 	while (true)
         {
             uavcan::protocol::param::GetSet::Request req;
             req.index = remote_params.size();
+	    // Make call to get parameter
             auto res = performBlockingServiceCall<uavcan::protocol::param::GetSet>(node, remote_node_id, req);
+	    // Check for an error code
             if (res.first < 0)
             {
 		throw std::runtime_error("Failed to get param: " + std::to_string(res.first));
@@ -105,6 +108,7 @@ int main(int argc, const char** argv)
             {
                 break;
             }
+	    // Print the data to the file
             filestream << res.second << std::endl << std::endl;
             remote_params.push_back(res.second);
         }
@@ -117,11 +121,14 @@ int main(int argc, const char** argv)
          * Setting all parameters to their maximum values, if applicable. Access by name.
          */
         std::string line;
+	// Open the file
         fstream ymlfile(filepath);
         if (ymlfile.is_open())
         {
+	    // Skip to the second line of the file as the first is not needed
 	    getline(ymlfile, line);
 	    getline(ymlfile, line);
+	    // While we have not hit the end of the file
 	    while(!ymlfile.eof()){
 		bool floater = 0;
 		bool inter = 0;
@@ -133,46 +140,54 @@ int main(int argc, const char** argv)
 
 		uavcan::protocol::param::GetSet::Request req;
 
-
+		// Check if the value type is an integer
 		if(line.find("integer") != std::string::npos){
 		    floater = 0;
                     inter = 1;
                     booler = 0;
+		    // Remove the characters before the value
 		    line.erase(0,17);
 		    intVal = std::stoi(line);
 		    req.value.to<uavcan::protocol::param::Value::Tag::integer_value>() = intVal;
 		}
+		// Check if the value type is a float
 		else if(line.find("real") != std::string::npos){
 		    floater = 1;
                     inter = 0;
                     booler = 0;
-                    line.erase(0,17);
+		    // Remove the characters before the value
                     line.erase(0,14);
                     floatVal = std::stof(line);
 		    req.value.to<uavcan::protocol::param::Value::Tag::real_value>() = floatVal;
 		}
+		// Check if the value type is a string
                 else if(line.find("boolean") != std::string::npos){
 		    floater = 0;
                     inter = 0;
                     booler = 1;
+		    // Remove the characters before the value
                     line.erase(0,17);
 		    boolVal = std::stoi(line);
 		    req.value.to<uavcan::protocol::param::Value::Tag::boolean_value>() = boolVal;
 		}
 
+		// Skip forward to the line containin the name of the parameter
 		for(int i = 0; i < 7; i++)
 		{
 		    getline(ymlfile, line);
 		}
+		// Get the name of the parameter from the line
 		line.erase(0,7);
 		name = line.substr(0,line.size()-1);
                 req.name = name.c_str();
 		
                 auto res = performBlockingServiceCall<uavcan::protocol::param::GetSet>(node, remote_node_id, req);
+		// Check that there is not an error code returned
                 if (res.first < 0)
                 { 
                     throw std::runtime_error("Failed to set param: " + std::to_string(res.first));
                 }
+		// Check if the parameter was updated to the new value
 		if (inter){
 			if (res.second.value.to<uavcan::protocol::param::Value::Tag::integer_value>() != intVal){
 				cout << "Failed to update param: " << res.second.name.c_str() << endl;
@@ -189,6 +204,7 @@ int main(int argc, const char** argv)
                         }
                 }
 
+		// Skip to the value of the next parameter
 		for(int i = 0; i < 3; i++)
                 {
                     getline(ymlfile, line);
