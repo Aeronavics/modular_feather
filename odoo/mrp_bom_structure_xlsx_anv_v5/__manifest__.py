@@ -1,9 +1,5 @@
-# Copyright 2018 Eficent Business and IT Consulting Services S.L.
-#   (http://www.eficent.com)
-# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
-
 {
-    'name': "MRP BOM Structure XLSX ANV V3",
+    'name': "MRP BOM Structure XLSX ANV V5",
     'version': '12.0.2.0.0',
     'category': 'Manufacturing',
     'summary': 'Export BoM Structure and Cost to Excel .XLSX',
