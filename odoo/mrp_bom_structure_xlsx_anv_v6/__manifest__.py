@@ -1,5 +1,5 @@
 {
-    'name': "MRP BOM Structure XLSX ANV V5",
+    'name': "MRP BOM Structure XLSX ANV V6",
     'version': '12.0.2.0.0',
     'category': 'Manufacturing',
     'summary': 'Export BoM Structure and Cost to Excel .XLSX',

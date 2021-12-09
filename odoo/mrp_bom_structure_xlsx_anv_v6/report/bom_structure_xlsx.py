@@ -31,15 +31,11 @@ class BomStructureXlsx(models.AbstractModel):
             sheet.write(i, 3, ch.product_id.display_name or '')
             if ch.product_id.seller_ids:
                 sheet.write(i, 4, ch.product_id.seller_ids[0].display_name)
-                sheet.write(i, 7, round(ch.product_id.seller_ids[0].price / ch.product_id.seller_ids[0].currency_id.rate, 2) or '')
-                sheet.write(i, 8, round(ch.product_id.seller_ids[0].price / ch.product_id.seller_ids[0].currency_id.rate * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty, 2) or '')
-                if ch.product_id.seller_ids[0].price and ch.product_id.seller_ids[0].currency_id.rate and ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id):
-                    cost += ch.product_id.seller_ids[0].price / ch.product_id.seller_ids[0].currency_id.rate * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty
-            else:
-                sheet.write(i, 7, ch.product_id.standard_price or '')
-                sheet.write(i, 8, ch.product_id.standard_price * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty or '')
-                if ch.product_id.standard_price and ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id):
-                    cost += ch.product_id.standard_price * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty                
+
+            sheet.write(i, 7, ch.product_id.standard_price or '')
+            sheet.write(i, 8, ch.product_id.standard_price * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty or '')
+            if ch.product_id.standard_price and ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id):
+                cost += ch.product_id.standard_price * ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty
             sheet.write(i, 5, ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id) or '')
             sheet.write(i, 6, ch.product_uom_id._compute_quantity(ch.product_qty, ch.product_id.uom_id)*total_qty or '')
             
